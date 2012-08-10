@@ -32,7 +32,7 @@ class HTMLElement extends \DOMElement {
 	}
 	
 	public function getOuterHTML() {
-		return $this->ownerDocument->saveXML($this);
+		return $this->ownerDocument->saveHTML($this);
 	}
 	
 	public function getNormalizedInnerText() {
