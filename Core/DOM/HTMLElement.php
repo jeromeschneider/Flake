@@ -52,7 +52,7 @@ class HTMLElement extends \DOMElement {
 			$sText = str_replace('  ', ' ', $sText, $iCount);
 		} while($iCount > 0);
 		
-		return $sText;
+		return trim($sText);
 	}
 	
 	public function setInnerHTML($sHtml) {
@@ -104,5 +104,27 @@ class HTMLElement extends \DOMElement {
 	
 	public function isDOMText() {
 		return $this->nodeType === XML_TEXT_NODE;
+	}
+	
+	public function getSiblingPosition() {
+		$iPos = 0;
+		$oNode = $this;
+		
+		while(!is_null($oNode->previousSibling)) {
+			$oNode = $oNode->previousSibling;
+			$iPos++;
+		}
+		
+		return $iPos;
+	}
+	
+	public function getTreePosition() {
+		# Tree position is number 100^level + sibling offset
+		$iLevel = substr_count($this->getNodePath(), "/") - 2;	# -1 to align on 0, and -1 to compensate for /document
+		if($iLevel === 0) {
+			return $this->getSiblingPosition();
+		} else {
+			return pow(10, $iLevel) + $this->getSiblingPosition();
+		}
 	}
 }
