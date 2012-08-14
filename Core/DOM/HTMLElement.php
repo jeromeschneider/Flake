@@ -93,10 +93,16 @@ class HTMLElement extends \DOMElement {
 	
 	public function getInnerHTML() {
 		$sHtml = '';
-		foreach($this->childNodes as $child) {
-			$sHtml .= $this->ownerDocument->saveHTML($child);
+		$iNodes = $this->childNodes->length;
+		for($i = 0; $i < $iNodes; $i++) {
+			$oItem = $this->childNodes->item($i);
+			$sHtml .= $oItem->ownerDocument->saveHTML($oItem);
 		}
 		
 		return $sHtml;
+	}
+	
+	public function isDOMText() {
+		return $this->nodeType === XML_TEXT_NODE;
 	}
 }
