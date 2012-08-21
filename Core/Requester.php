@@ -44,6 +44,22 @@ abstract class Requester extends \Flake\Core\FLObject {
 		return $this->setLimitStart($iStart);
 	}
 	
+	public function orderBy($sOrderField, $sOrderDirection = "ASC") {
+		$this->sOrderField = $sOrderField;
+		$this->sOrderDirection = $sOrderDirection;
+		return $this;
+	}
+
+	public function setLimitStart($iLimitStart) {
+		$this->iLimitStart = $iLimitStart;
+		return $this;
+	}
+
+	public function setLimitNumber($iLimitNumber) {
+		$this->iLimitNumber = $iLimitNumber;
+		return $this;
+	}
+	
 	public abstract function execute();
 	public abstract function count();
 }

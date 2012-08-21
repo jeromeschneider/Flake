@@ -200,6 +200,11 @@ class Framework extends \Flake\Core\Framework {
 			die("<h3>DB file is not writable. Please give write permissions on file '<span style='font-family: monospace; background: yellow;'>" . PROJECT_SQLITE_FILE . "</span>'</h3>");
 		}
 		
+		# Asserting DB directory is writable
+		if(!is_writable(dirname(PROJECT_SQLITE_FILE))) {
+			die("<h3>The <em>FOLDER</em> containing the DB file is not writable, and it has to.<br />Please give write permissions on folder '<span style='font-family: monospace; background: yellow;'>" . dirname(PROJECT_SQLITE_FILE) . "</span>'</h3>");
+		}
+		
 		if(file_exists(PROJECT_SQLITE_FILE) && is_readable(PROJECT_SQLITE_FILE) && !isset($GLOBALS["DB"])) {
 			$GLOBALS["DB"] = new \Flake\Core\Database\Sqlite(PROJECT_SQLITE_FILE);
 			return TRUE;

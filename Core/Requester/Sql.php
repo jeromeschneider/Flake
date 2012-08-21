@@ -26,7 +26,7 @@
 
 namespace Flake\Core\Requester;
 
-class Sql extends \Flake\Core\FLObject {
+class Sql extends \Flake\Core\Requester {
 
 	protected $sDataTable = "";
 	protected $aClauses = array();
@@ -36,10 +36,6 @@ class Sql extends \Flake\Core\FLObject {
 	protected $iLimitStart = FALSE;
 	protected $iLimitNumber = FALSE;
 	protected $bHasBeenExecuted = FALSE;
-
-	public function __construct($sModelClass) {
-		$this->sModelClass = $sModelClass;
-	}
 
 	public function setDataTable($sDataTable) {
 		$this->sDataTable = $sDataTable;
@@ -103,30 +99,6 @@ class Sql extends \Flake\Core\FLObject {
 	public function addClauseNotIn($sField, $sValue) {
 		$sWrap = "{field} NOT IN ({value})";
 		$this->addClauseWrapped($sField, $sValue, $sWrap);
-		return $this;
-	}
-	
-	public function orderBy($sOrderField, $sOrderDirection = "ASC") {
-		$this->sOrderField = $sOrderField;
-		$this->sOrderDirection = $sOrderDirection;
-		return $this;
-	}
-	
-	public function limit($iStart, $iNumber = FALSE) {
-		if($iNumber !== FALSE) {
-			return $this->setLimitStart($iStart)->setLimitNumber($iLimitNumber);
-		}
-		
-		return $this->setLimitStart($iStart);
-	}
-
-	public function setLimitStart($iLimitStart) {
-		$this->iLimitStart = $iLimitStart;
-		return $this;
-	}
-
-	public function setLimitNumber($iLimitNumber) {
-		$this->iLimitNumber = $iLimitNumber;
 		return $this;
 	}
 
