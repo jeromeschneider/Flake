@@ -88,6 +88,14 @@ class Framework extends \Flake\Core\Framework {
 			define("MONGOOSE_SERVER", FALSE);
 		}
 
+		# Undo magic_quotes as this cannot be disabled by .htaccess on PHP ran as CGI
+		# Source: http://stackoverflow.com/questions/517008/how-to-turn-off-magic-quotes-on-shared-hosting
+		if(in_array(strtolower(ini_get('magic_quotes_gpc')), array('1', 'on'))) {
+			$_POST = array_map('stripslashes', $_POST);
+			$_GET = array_map('stripslashes', $_GET);
+			$_COOKIE = array_map('stripslashes', $_COOKIE);
+		}
+
 		#################################################################################################
 
 		# determine Flake install root path
