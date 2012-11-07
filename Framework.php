@@ -96,6 +96,11 @@ class Framework extends \Flake\Core\Framework {
 			$_COOKIE = array_map('stripslashes', $_COOKIE);
 		}
 
+		# Fixing some CGI environments, that prefix HTTP_AUTHORIZATION (forwarded in .htaccess) with "REDIRECT_"
+		if(array_key_exists("REDIRECT_HTTP_AUTHORIZATION", $_SERVER)) {
+			$_SERVER["HTTP_AUTHORIZATION"] = $_SERVER["REDIRECT_HTTP_AUTHORIZATION"];
+		}
+
 		#################################################################################################
 
 		# determine Flake install root path
@@ -130,10 +135,11 @@ class Framework extends \Flake\Core\Framework {
 			$sDirName = "/";
 		}
 		
-		$sBaseUrl = self::appendSlash(substr($sDirName, 0, -1 * strlen(PROJECT_CONTEXT_BASEURI)));
+		$sBaseUrl = self::rmBeginSlash(self::appendSlash(substr($sDirName, 0, -1 * strlen(PROJECT_CONTEXT_BASEURI))));
+		define("PROJECT_BASEURI", self::prependSlash($sBaseUrl));	# SabreDAV needs a "/" at the beginning of BASEURL
+
 		$sProtocol = \Flake\Util\Tools::getCurrentProtocol();
-		define("PROJECT_BASEURI", $sBaseUrl);
-		define("PROJECT_URI", $sProtocol . "://" . self::rmEndSlash($_SERVER["HTTP_HOST"]) . $sBaseUrl);
+		define("PROJECT_URI", $sProtocol . "://" . self::appendSlash($_SERVER["HTTP_HOST"]) . $sBaseUrl);
 		unset($sScript); unset($sDirName); unset($sBaseUrl); unset($sProtocol);
 
 		#################################################################################################
@@ -252,16 +258,17 @@ class Framework extends \Flake\Core\Framework {
 				PROJECT_DB_MYSQL_USERNAME,
 				PROJECT_DB_MYSQL_PASSWORD
 			);
+
+			# We now setup the connexion to use UTF8
+			$GLOBALS["DB"]->query("SET NAMES UTF8");
 		} catch(\Exception $e) {
-			die("<h3>Baïkal was not able to establish a connexion to the configured MySQL database (as configured in Specific/config.system.php).</h3>");
+			#die("<h3>Baïkal was not able to establish a connexion to the configured MySQL database (as configured in Specific/config.system.php).</h3>");
 		}
 		
-		# We now setup the connexion to use UTF8
-		$GLOBALS["DB"]->query("SET NAMES UTF8");
 		return TRUE;
 	}
 	
 	public static function isDBInitialized() {
-		return \Flake\Util\Tools::is_a($GLOBALS["DB"], "\Flake\Core\Database");
+		return isset($GLOBALS["DB"]) && \Flake\Util\Tools::is_a($GLOBALS["DB"], "\Flake\Core\Database");
 	}
 }
