@@ -123,7 +123,13 @@ class Framework extends \Flake\Core\Framework {
 
 		# Determine PROJECT_URI
 		$sScript = substr($_SERVER["SCRIPT_FILENAME"], strlen($_SERVER["DOCUMENT_ROOT"]));
-		$sDirName = self::appendSlash(dirname($sScript));
+		$sDirName = dirname($sScript);
+		if($sDirName !== ".") {
+			$sDirName = self::appendSlash($sDirName);
+		} else {
+			$sDirName = "/";
+		}
+		
 		$sBaseUrl = self::appendSlash(substr($sDirName, 0, -1 * strlen(PROJECT_CONTEXT_BASEURI)));
 		$sProtocol = \Flake\Util\Tools::getCurrentProtocol();
 		define("PROJECT_BASEURI", $sBaseUrl);
