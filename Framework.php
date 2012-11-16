@@ -128,7 +128,8 @@ class Framework extends \Flake\Core\Framework {
 
 		# Determine PROJECT_URI
 		$sScript = substr($_SERVER["SCRIPT_FILENAME"], strlen($_SERVER["DOCUMENT_ROOT"]));
-		$sDirName = dirname($sScript);
+		$sDirName = str_replace("\\", "/", dirname($sScript));	# fix windows backslashes
+
 		if($sDirName !== ".") {
 			$sDirName = self::appendSlash($sDirName);
 		} else {
