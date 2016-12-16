@@ -118,8 +118,11 @@ class Framework extends \Flake\Core\Framework {
 
 		require_once(PROJECT_PATH_CORE . "Distrib.php");
 
+		# Include Flake Framework config
+		require_once(FLAKE_PATH_ROOT . "config.php");
+
 		if(PROJECT_PACKAGE === "regular") {
-			define("PROJECT_PATH_DOCUMENTROOT", PROJECT_PATH_ROOT . "html/");
+			define("PROJECT_PATH_DOCUMENTROOT", PROJECT_PATH_ROOT . FLAKE_DOCUMENTROOT_FOLDER . "/");
 		} elseif(PROJECT_PACKAGE === "flat") {
 			define("PROJECT_PATH_DOCUMENTROOT", PROJECT_PATH_ROOT);
 		} else {
@@ -147,9 +150,6 @@ class Framework extends \Flake\Core\Framework {
 		
 		require_once(FLAKE_PATH_ROOT . 'Util/Twig/lib/Twig/Autoloader.php');
 		\Twig_Autoloader::register();
-
-		# Include Flake Framework config
-		require_once(FLAKE_PATH_ROOT . "config.php");
 
 		# Determine Router class
 		$GLOBALS["ROUTER"] = \Flake\Util\Tools::router();

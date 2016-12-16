@@ -35,3 +35,15 @@ if(defined("PROJECT_TIMEZONE")) {
 } else {
 	define("FLAKE_TIMEZONE", "Europe/Paris");
 }
+
+/**
+ * The constant PROJECT_DOCUMENTROOT_FOLDER allows the project to 
+ * define a folder, relative to the PROJECT_PATH_ROOT, which will 
+ * be used instead of the default "html" folder when constructing 
+ * PROJECT_PATH_DOCUMENTROOT.
+ */
+if(defined("PROJECT_DOCUMENTROOT_FOLDER")) {
+	define("FLAKE_DOCUMENTROOT_FOLDER", PROJECT_DOCUMENTROOT_FOLDER);
+} else {
+	define("FLAKE_DOCUMENTROOT_FOLDER", 'html');
+}
